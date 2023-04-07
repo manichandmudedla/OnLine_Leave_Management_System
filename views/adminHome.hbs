@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+   {{>meta title="Admin"}}
+</head>
+<body class="row" >
+{{>header}}
+<!--nav tab-->
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#home">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#menu1">Faculty/Hod/Director Admin</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#menu2">Leave Admin</a>
+  </li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane container active" id="home">
+    <!--Student -->
+    <div id="Stdmsg" class="p-2 mx-auto text-center text-info  rounded"></div>
+    <form id="create" class="bg-light p-2 rounded">
+      <div class="h5 ">Add new Student :</div>
+  <div class="mx-auto row p-2">
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" autocomplete="off" required placeholder="User" name="user" />
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" placeholder="Name" name="name" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" placeholder="mentorId" name="mentorId" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2">
+      <select class="form-select" name="branch">
+        <option value="CSE">CSE</option><option value="CSD">CSD</option><option value="CSM">CSM</option><option value="ECE">ECE</option><option value="CIVIL">CIVIL</option><option value="MECH">MECH</option>
+      </select>
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="password" class="form-control" placeholder="password" name="password" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2"><input  type="submit" class="btn btn-primary" value="Submit"></div>
+  </div>
+</form>
+<hr/>
+  <div class="h4">Search By:</div>
+  <form id="StdSearch" class="bg-light p-2 rounded">
+    <div class="row mx-auto"><div class="col-sm col-md p-2"><select class="form-select" id="SType" name="searchBy" >
+      <option value="user">user</option><option value="branch">branch</option><option value="mentorId">MentorId</option>
+    </select> </div>
+    <div class="col-sm col-md p-2"><input class="form-control" id="Svalue" name="value" autocomplete="off" required placeholder="Enter Value" type="text"></div><div class="col-sm col-md p-2"><input class="btn btn-primary" id="SSearch" type="submit" value="Search"></div>
+    </div>
+  </form>
+  <hr/>
+  <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm-3 h5">Name</div><div class="col-sm-3 h5">Email</div><div class="col-sm h5">MentorId</div><div class="col-sm h5">Update</div><div class="col-sm h5">Delete</div></div>
+  <div class="row bg-light rounded" id="stdResult"></div>
+    <!--Student -->
+  </div>
+  <div class="tab-pane container fade" id="menu1">
+
+    <!--Faculty -->
+    <div id="fcltymsg" class="p-2 mx-auto text-center text-info  rounded"></div>
+    <select name="TypeAdmin" class="form-select" id="AdminType">
+      <option value="faculty">Faculty</option>
+      <option value="hod">HOD</option>
+      <option value="director">Director</option>
+    </select>
+    <form id="createF" class="bg-light p-2 rounded">
+      <div class="h5 ">Add new <span id="TypeName">FACULTY</span> :</div>
+  <div class="mx-auto row p-2">
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" autocomplete="off" required placeholder="User" name="user" />
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" placeholder="Name" name="name" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="text" class="form-control" placeholder="Email" name="email" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2">
+      <select class="form-select" name="department">
+        <option value="CSE">CSE</option><option value="CSD">CSD</option><option value="CSM">CSM</option><option value="ECE">ECE</option><option value="CIVIL">CIVIL</option><option value="MECH">MECH</option>
+      </select>
+    </div>
+    <div class="col-sm col-md p-2">
+      <input type="password" class="form-control" placeholder="password" name="password" autocomplete="off" required />
+    </div>
+    <div class="col-sm col-md p-2"><input  type="submit" class="btn btn-primary" value="Submit"></div>
+  </div>
+</form>
+<hr/>
+  <div class="h4">Search By:</div>
+  <form id="fcltySearch" class="bg-light p-2 rounded">
+    <div class="row mx-auto"><div class="col-sm col-md p-2"><select class="form-select" id="FType" name="searchBy" >
+      <option value="user">user</option><option value="department">Department</option>
+    </select> </div>
+    <div class="col-sm col-md p-2"><input class="form-control" id="Fvalue" name="value" autocomplete="off" required placeholder="Enter Value" type="text"></div><div class="col-sm col-md p-2"><input class="btn btn-primary" id="FSearch" type="submit" value="Search"></div>
+    </div>
+  </form>
+  <hr/>
+  <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm-3 h5">Name</div><div class="col-sm-3 h5">Email</div><div class="col-sm h5">Department</div><div class="col-sm h5">Update</div><div class="col-sm h5">Delete</div></div>
+  <div class="row bg-light rounded" id="fcltyResult"></div>
+    <!--Faculty -->
+  </div>
+  <div class="tab-pane container fade" id="menu2">
+    <!--Leave-->
+    <div id="Leavemsg" class="p-2 mx-auto text-center text-info  rounded"></div>
+    <select name="LeaveType" class="form-select my-2" id="LeaveType">
+      <option value="student">Student</option>
+      <option value="faculty">Faculty</option>
+      <option value="hod">HOD</option></select>
+      <div class="h5 ">Leaves of <span id="LeaveName">STUDENT</span> :</div>
+      <hr/>
+      <div class="h4">Search By:</div>
+      <form id="LeaveSearch" class="bg-light p-2 rounded">
+    <div class="row mx-auto"><div class="col-sm col-md p-2"><select class="form-select" id="LType" name="searchBy" >
+      <option value="user">user</option><option value="all">ALL</option>
+    </select> </div>
+    <div class="col-sm col-md p-2"><input class="form-control" id="Lvalue" name="value" autocomplete="off" placeholder="Enter Value" type="text"></div><div class="col-sm col-md p-2"><input class="btn btn-primary" id="LSearch" type="submit" value="Search"></div>
+    </div>
+  </form>
+  <hr/>
+  <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm h5">Name</div><div class="col-sm h5">Delete</div></div>
+  <div class="row bg-light rounded" id="LeaveResult"></div>
+      
+    
+
+    <!--Leave-->
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+      //Student
+        $('#create ').on("submit",function(e){
+            e.preventDefault();
+            $.post('/student/user',$(this).serialize(),function(data,status){
+                $('#Stdmsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#Stdmsg').html("").css('background-color','');},3000);
+                $('#create input[type="text"]').val("");
+                $('#create input[type="password"]').val("");
+            });
+           
+        });
+
+        $('#StdSearch').on('submit',function(e){
+          e.preventDefault();
+          $.get(`/student/user?${$('#SType').val()}=${$('#Svalue').val()}`,function(data,sucess){
+            var result='';
+            for(obj of data){
+                 result+=`<form class="stdUpdate" action='/student/user/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="mentorId" value="${obj.mentorId}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
+            }
+            $('#stdResult').html(result);
+
+          $('form.stdUpdate button').on('click',function(e){
+            e.preventDefault();
+            const method=$(this).attr('value');
+            const form=$(this.form);
+            if(method==='DELETE'){
+              $.post($(form).attr('action'),"_method="+method,function(data,status){
+                $('#Stdmsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#Stdmsg').html("").css('background-color','');},3000);
+                $('#SSearch').click();
+
+              });
+            }else{
+              $.post($(form).attr('action'),form.serialize()+"&_method="+method,function(data,status){
+                $('#Stdmsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#Stdmsg').html("").css('background-color','');},3000);
+                $('#SSearch').click();
+              });
+            }
+            
+          });
+
+          });
+         // $('#StdSearch input[type=text]').val("");
+        });
+
+        //Faculty
+        $('#createF ').on("submit",function(e){
+            e.preventDefault();
+            $.post(`/${$('#AdminType').val()}/user`,$(this).serialize(),function(data,status){
+                $('#fcltymsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#fcltymsg').html("").css('background-color','');},3000);
+                $('#createF input[type="text"]').val("");
+                $('#createF input[type="password"]').val("");
+            });
+           
+        });
+
+        $('#fcltySearch').on('submit',function(e){
+          e.preventDefault();
+          $.get(`/${$('#AdminType').val()}/user?${$('#FType').val()}=${$('#Fvalue').val()}`,function(data,sucess){
+            var result='';
+            for(obj of data){
+                 result+=`<form class="fcltyUpdate" action='/${$('#AdminType').val()}/user/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="department" value="${obj.department}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
+            }
+            $('#fcltyResult').html(result);
+
+          $('form.fcltyUpdate button').on('click',function(e){
+            e.preventDefault();
+            const method=$(this).attr('value');
+            const form=$(this.form);
+            if(method==='DELETE'){
+              $.post($(form).attr('action'),"_method="+method,function(data,status){
+                $('#fcltymsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#fcltymsg').html("").css('background-color','');},3000);
+                 $('#FSearch').click();
+              });
+            }else{
+              $.post($(form).attr('action'),form.serialize()+"&_method="+method,function(data,status){
+                console.log(data);
+                console.log($(form).attr('action'));
+                $('#fcltymsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#fcltymsg').html("").css('background-color','');},3000);
+                 $('#FSearch').click();
+              });
+            }
+           
+          });
+
+          });
+         // $('#fcltySearch input[type=text]').val("");
+        });
+
+        $('#AdminType').on('change',function(){
+            $('#TypeName').html($('#AdminType').val().toUpperCase() );
+            
+            if($('#AdminType').val()==='director')$("select[name='department']").attr('disabled',true);
+            else $("select[name='department']").removeAttr('disabled');
+        });
+        $('#fcltySearch').on('click',()=>{
+          if($('#AdminType').val()==='director')
+          setTimeout(()=>{$("input[name='department']").attr('disabled',true);},2000);
+        });
+
+        //Leave
+        $('#LeaveSearch').on('submit',function(e){
+          e.preventDefault();
+          console.log("working");
+          var reqData="";
+          if($('#LType').val()==='user')reqData='?user='+$('#Lvalue').val();
+          console.log("working");
+          $.get(`/${$('#LeaveType').val()}/leave`+reqData,function(data,sucess){
+            var result='';
+            for(obj of data){
+                 result+=`<form class="LeaveDelete" action='/${$('#LeaveType').val()}/leave/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="user" value="${obj.user}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="name" value="${obj.name}"></div><div class="col-sm p-1"><button class='btn btn-danger'>Delete</button></div></div></form>`;
+            }
+            $('#LeaveResult').html(result);
+
+          $('form.LeaveDelete button').on('click',function(e){
+            e.preventDefault();
+            const form=$(this.form);
+              $.post($(form).attr('action'),"_method=DELETE",function(data,status){
+                $('#Leavemsg').html(data).css('background-color','#8dedf2');
+                setTimeout(()=>{$('#Leavemsg').html("").css('background-color','');},3000);
+                 $('#LSearch').click();
+              });
+           
+           
+          });
+
+          });
+           });
+           $('#LeaveType').on('change',function(){
+            $('#LeaveName').html($('#LeaveType').val().toUpperCase() );
+           
+        });
+
+
+        
+    });
+    window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+</script>
+</body>
+</html>

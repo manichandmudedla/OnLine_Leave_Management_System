@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+   {{>meta title="Director"}}
+</head>
+<body class="row" style="background-image:url(bgImg.webp); background-repeat: no-repeat;background-size:cover;">
+{{>header}}
+<!--nav tab-->
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#home">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#menu1">HOD Permision</a>
+  </li>
+  
+  
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane container active" id="home">
+      <div class="h4">Faculty Leave status</div>
+      <button hidden id="refresh-2" ></button>
+      <div class="row h5 bg-secondary p-3 rounded">
+        <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">email</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
+      </div>
+      <div class="row mt-2" id="stf">
+      </div>
+  </div>
+  <div class="tab-pane container fade" id="menu1">
+    <div class="h4">HOD Leave status</div>
+    <button hidden id="refresh-3"></button>
+      <div class="row h5 bg-secondary p-3 rounded">
+        <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">email</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
+      </div>
+      <div class="row mt-2" id="hod">
+      </div>
+
+  </div>
+  
+</div>
+
+<!--Script-->
+<script>
+   $(document).ready(function(){
+      $("#refresh-2").click(function(){
+        $.get("/hod/leave?directorPermision=Pending",function(data, statusTxt){
+      if(statusTxt == "success"){
+          alert("External content loaded successfully!");
+        var reqst="";
+        for(obj of data){
+          reqst+=(`<form class='f1' action='/hod/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.email}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
+        }
+        $("#hod").html(reqst);
+         $('form.f1 button').on('click',function(e){
+
+            e.preventDefault();
+            const form=$(this.form);
+            $.post(form.attr('action'),form.serialize()+"&directorPermision="+$(this).attr('value'),function(data,status){
+              if(status==='success'){
+              $("#refresh-2").click();
+                console.log(status);}
+            });
+
+           });
+
+        }
+       if(statusTxt == "error")  alert("Error somthing went wrong..");
+    });
+});
+
+    //staff
+    $("#refresh-3").click(function(){
+    $.get("/faculty/leave?hodPermision=Accepted&directorPermision=Pending", function(data, status){
+      //alert("faculty data loaded...");
+      var reqst1='';
+      for(obj of data){
+          reqst1+=(`<form class='f2' action='/faculty/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.email}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
+        }
+        $("#stf").html(reqst1);
+            $('form.f2 button').on('click',function(e){
+
+            e.preventDefault();
+            const form=$(this.form);
+            $.post(form.attr('action'),form.serialize()+"&directorPermision="+$(this).attr('value'),function(data,status){
+              if(status==='success'){
+              $("#refresh-3").click();
+                console.log(status);}
+            });
+
+           });
+        if(status== "error")  alert("Error somthing went wrong..");
+      
+    });
+});
+    $("#refresh-2").click();
+    $("#refresh-3").click();
+
+  });
+window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+
+</script>
+
+</body>
+</html>

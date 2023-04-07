@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {{>meta title="Hod"}}
+</head>
+<body class="row" style="background-image:url(bgImg.webp); background-repeat: no-repeat;background-size:cover;">
+{{>header}}
+<!--nav tab-->
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <input type="hidden" id="department" value="{{department}}" readonly>
+    <a class="nav-link active" data-bs-toggle="tab" href="#home">Home</a>
+  </li>
+  <li class="nav-item">
+    <input type="hidden" id="user" value="{{user}}" readonly>
+    <a class="nav-link" data-bs-toggle="tab" href="#menu1">Staf Permision</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#menu2">Apply Leave</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#menu3">Status</a>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane container active" id="home">
+      <div class="h4">Student Leave status</div>
+      <button hidden id="refresh-2" ></button>
+      <div class="row h5 bg-secondary p-3 rounded">
+        <div class="col-sm">Roll No</div><div class="col-sm">Name</div><div class="col-sm">Mentor Id</div><div class="col-sm">Reason</div><div class="col-sm">Accept</div><div class="col-sm">Reject</div>
+      </div>
+      <div class="row mt-2" id="per">
+      </div>
+  </div>
+  <div class="tab-pane container fade" id="menu1">
+    <button hidden id="refresh-3"></button>
+    <div class="h4">Faculty Leave status</div>
+      <div class="row h5 bg-secondary p-3 rounded">
+        <div class="col-sm">User</div><div class="col-sm">Name</div><div class="col-sm">email</div><div class="col-sm">Reason</div><div class="col-sm">Accept</div><div class="col-sm">Reject</div>
+      </div>
+      <div class="row mt-2" id="stf">
+      </div>
+
+  </div>
+  <div class="tab-pane container fade" id="menu2">{{>stafLeave title="hod"}}</div>
+  <div class="tab-pane container fade" id="menu3">
+    <button id="refresh" class="btn btn-primary">Refresh</button>
+    <!--status  -->
+    <div class="col-xs col-sm-8 col-md-6  mt-2 mt-md-5 mb-5  mx-auto p-4 " style=" background-color: rgb(77, 69, 132); border-radius:20px; box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px; ">
+        <div class="row mb-3 h4  text-white overflow-hidden">
+        <img src="/static/img.webp" alt="CMRIT STD LOGIN" style="width:100vw" />
+        </div>
+        <div class="d-flex row">
+            <div class="col-xs col-sm-12 col-md-6 col-xl-6 text-center text-white overflow-hidden border-end">
+                <p >Online Leave</p>
+                <img class="mx-auto d-block mt-3 mb-3" src="/static/pofile.png" alt="This is profile" width="100vw">
+                <p >CMR Institute Of Technology</p>
+                <div>Name: <span>{{name}}</span></div>
+                <div>Department: <span>{{department}}</span></div>
+            </div>
+            <div class="col-xs col-sm-12 col-md-6 col-xl-6 overflow-hidden text-white">
+              <div>REQUEST TIME: <span id="time"></span></div>
+              <div class="input-group mb-3">
+                    <span class="input-group-text">user: </span><input type="text" class="form-control" name="user" id="Empid" readonly/>
+              </div>
+              <div class="input-group mb-3">
+                    <span class="input-group-text">DIRECTOR </span><input type="text" class="form-control" id="directorPermision" readonly/>
+              </div>
+            </div>
+        </div>
+    </div>
+    <!--status  -->
+
+  </div>
+  
+<!--Script-->
+    
+  </div>
+</div>
+
+<!--Script-->
+<script>
+   $(document).ready(function(){
+      $("#refresh-2").click(function(){
+        $.get("/student/leave?mentorPermision=Accepted&hodPermision=Pending&branch="+$('#department').val(),function(data, statusTxt){
+      if(statusTxt == "success"){
+        var reqst='';
+        for(obj of data){
+          reqst+=(`<form class='f1' action='/student/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.mentorId}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="hodPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="hodPermision" value="Rejected">Reject</button></div></div></form>`);
+        }
+        $("#per").html(reqst);
+        $('form.f1 button').on('click',function(e){
+
+            e.preventDefault();
+            const form=$(this.form);
+            $.post(form.attr('action'),form.serialize()+"&hodPermision="+$(this).attr('value'),function(data,status){
+              if(status==='success'){
+              $("#refresh-2").click();
+                console.log(status);}
+            });
+
+           });
+
+        }
+       if(statusTxt == "error")  alert("Error somthing went wrong..");
+    });
+    });
+
+    //staff
+    $("#refresh-3").click(function(){
+    $.get("/faculty/leave?hodPermision=Pending&department="+$('#department').val(), function(data, status){
+      //alert("faculty data loaded...");
+      var reqst1="";
+      for(obj of data){
+          reqst1+=(`<form class='f2' action='/faculty/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.email}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="hodPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="hodPermision" value="Rejected">Reject</button></div></div></form>`);
+        }
+        $("#stf").html(reqst1);
+        $('form.f2 button').on('click',function(e){
+
+            e.preventDefault();
+            const form=$(this.form);
+            $.post(form.attr('action'),form.serialize()+"&hodPermision="+$(this).attr('value'),function(data,status){
+              if(status==='success'){
+              $("#refresh-3").click();
+                console.log(status);}
+            });
+
+           });
+
+        if(status== "error")  alert("Error: " + xhr.status + ": " + xhr.statusText);
+      
+    });
+  });
+    //hod status
+     $("#refresh").click(function(){
+    $.get("/hod/leave?user="+$("#user").val(), function(data, status){
+      alert( "Status updated"+ "\nStatus: " + status);
+      if(data.length===0){
+        $("#Empid,#directorPermision").val("").css("background-color","white");
+        $("#time").html("");
+      }else{
+      data=data[0];
+      $("#time").html(data.date);
+      $('#Empid').val(data.user);
+      $("#directorPermision").val(data.directorPermision).css("background-color","yellow");
+      if(data.directorPermision=='Accepted')$("#directorPermision").css("background-color", "green");
+      else if(data.directorPermision=='Rejected') $("#directorPermision").css("background-color", "red");
+      }
+    });
+  });
+
+    $("#formId").submit(function(e){
+    e.preventDefault();
+    $.post($(this).attr('action'),$(this).serialize(),function(data,status){
+         $('#resMsg').html(data).css('background-color','#42e6f5');
+        setTimeout(()=>{$('#resMsg').html("").css('background-color','');},5000);
+        $("#refresh").click();
+    });
+  });
+
+    $("#refresh").click();
+    $("#refresh-2").click();
+    $("#refresh-3").click();
+
+
+  });
+
+  window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+</script>
+
+</body>
+</html>
