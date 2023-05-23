@@ -38,7 +38,7 @@ router.post('/student/leave',async(req,res)=>{
 router.patch('/student/leave/:id',async(req,res)=>{
    
     try{
-        const data=await StudentLeave.findOneAndUpdate({user : req.params.id},req.body,{
+        const data=await StudentLeave.findOneAndUpdate({ _id: req.params.id},req.body,{
             new:true
         });
          res.send(data);
@@ -48,7 +48,7 @@ router.patch('/student/leave/:id',async(req,res)=>{
 })
 router.delete('/student/leave/:id',async(req,res)=>{
     try{
-        await StudentLeave.deleteOne({user:req.params.id});
+        await StudentLeave.deleteOne({_id:req.params.id});
         res.send("Deleted sucessfully...!");
     }catch(e){
         res.send(500).send(e);

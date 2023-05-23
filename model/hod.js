@@ -27,7 +27,8 @@ const hod=new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    ftoken:String
 })
 hod.pre('save',async function(next){
     console.log(`save Function ${this}`);

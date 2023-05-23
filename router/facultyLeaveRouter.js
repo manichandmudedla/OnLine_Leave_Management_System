@@ -23,7 +23,7 @@ router.post('/faculty/leave',async(req,res)=>{
     try{
         const fcltyLeave=await FacultyLeave(req.body);
         const data=await fcltyLeave.save();
-        res.status(200).send("Leave applied sucessfully...")
+        res.status(200).send("Leave applied sucessfully...");
     }catch(e){
         res.status(208).send("You can Apply Leave only once per a day");
     }
@@ -31,7 +31,7 @@ router.post('/faculty/leave',async(req,res)=>{
 router.patch('/faculty/leave/:id',async(req,res)=>{
     
     try{
-        const data=await FacultyLeave.findOneAndUpdate({user : req.params.id},req.body,{
+        const data=await FacultyLeave.findOneAndUpdate({_id: req.params.id},req.body,{
             new:true
         });
         res.status(200).send(data);
@@ -41,7 +41,7 @@ router.patch('/faculty/leave/:id',async(req,res)=>{
 })
 router.delete('/faculty/leave/:id',async(req,res)=>{
     try{
-        await FacultyLeave.deleteOne({user:req.params.id});
+        await FacultyLeave.deleteOne({_id:req.params.id});
         res.send("Deleted sucessfully...!");
     }catch(e){
         res.send(500).send(e);

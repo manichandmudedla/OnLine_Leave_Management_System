@@ -31,7 +31,7 @@ router.post('/hod/leave',async(req,res)=>{
 router.patch('/hod/leave/:id',async(req,res)=>{
     
     try{
-        const data=await HodLeave.findOneAndUpdate({user : req.params.id},req.body,{ new:true});
+        const data=await HodLeave.findOneAndUpdate({_id: req.params.id},req.body,{ new:true});
         res.status(200).send(data);
     }catch(e){
         res.status(500).send(e);
@@ -39,7 +39,7 @@ router.patch('/hod/leave/:id',async(req,res)=>{
 })
 router.delete('/hod/leave/:id',async(req,res)=>{
     try{
-        await HodLeave.deleteOne({user:req.params.id});
+        await HodLeave.deleteOne({_id:req.params.id});
         res.send("Deleted sucessfully...!");
     }catch(e){
         res.send(500).send(e);

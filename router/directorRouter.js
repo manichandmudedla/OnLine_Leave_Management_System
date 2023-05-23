@@ -50,8 +50,9 @@ router.patch('/director/user/:id',async(req,res)=>{
     try{
          if(req.body.password !==undefined ){
              req.body.password=await bcrypt.hash(req.body.password,10);
+             req.body.ftoken="################";
          }
-        const fclty=await Director.findOneAndUpdate({user:req.params.id},req.body,{
+        const fclty=await Director.findOneAndUpdate({_id:req.params.id},req.body,{
             new:true
         });
         if(!fclty)throw Error("Invalid credentials");
@@ -62,7 +63,7 @@ router.patch('/director/user/:id',async(req,res)=>{
 })
 router.delete('/director/user/:id',async(req,res)=>{
     try{
-        await Director.deleteOne({user:req.params.id});
+        await Director.deleteOne({_id:req.params.id});
         res.send("Deleted sucessfully...!");
     }catch(e){
         res.status(500).send(`Delete failed`);

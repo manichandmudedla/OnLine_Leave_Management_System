@@ -27,7 +27,8 @@ const student=new mongoose.Schema({
         type:String,
         enum:['CSE','ECE','CSD','CSM','CIVIL','MECH']
     },
-    mentorId:String
+    mentorId:String,
+    ftoken:String
 })
 
 

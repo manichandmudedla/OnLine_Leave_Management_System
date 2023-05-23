@@ -53,8 +53,9 @@ router.patch('/student/user/:id',async(req,res)=>{
     try{
         if(req.body.password!==undefined){
             req.body.password=await bcrypt.hash(req.body.password,10);
+            req.body.ftoken="################";
         }
-        const std=await Student.findOneAndUpdate({user:req.params.id},req.body,{ 
+        const std=await Student.findOneAndUpdate({_id:req.params.id},req.body,{ 
             new:true
         });
         if(!std)throw Error('update Failed..!');
@@ -65,7 +66,7 @@ router.patch('/student/user/:id',async(req,res)=>{
 })
 router.delete('/student/user/:id',async(req,res)=>{
     try{
-        await Student.deleteOne({user:req.params.id});
+        await Student.deleteOne({_id:req.params.id});
         res.send("deleted sucessfully....");
     }catch(e){
         res.status(500).send("Deletion failed..");

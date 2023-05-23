@@ -2,7 +2,7 @@ require('dotenv').config()
 const express=require('express')
 const app = express();
 const hbs=require('hbs')
-
+process.env.TZ='Asia/Calcutta';
 
 require("./db/conn");
 
@@ -26,10 +26,15 @@ app.use(require('./router/facultyLeaveRouter'))
 app.use(require('./router/directorRouter'))
 app.use(require('./router/hodLeaveRouter'))
 app.use(require('./router/adminRouter'))
+app.use(require('./router/resetPassword'))
 
 
 app.get('/',(req,res)=>{
     res.render('login');
+})
+
+app.get('/forgotPassword',(req,res)=>{
+  res.render('forgotPassword');
 })
 // app.get('/logOut',(req,res)=>{
 //   res.status(440).render('login');
@@ -59,21 +64,25 @@ const sendLeaveReport=async function(reportOf,LeaveModel,toEmail){
     });
     try{
 
-    const LeaveReport=await LeaveModel.find({});
+    var LeaveReport;
+    if(reportOf=='Student') LeaveReport=await LeaveModel.find({});
+    else LeaveReport=await LeaveModel.find({to_date:{ $lte: date.format(new Date(), 'YYYY-MM-DD')}});
+    
     var report="";
 
     if(reportOf=='Student'){
+      LeaveReport=await LeaveModel.find({});
       report=`<h2>${reportOf} Leave Report</h2><br/><table><thead><th>ROll No</th><th>Name</th><th>MentorId</th><th>Branch</th><th>Mentor Permision</th><th>Hod Permision</th></thead><tbody>`;
     for(obj of LeaveReport)
       report+=`<tr><td>${obj.user}</td><td>${obj.name}</td><td>${obj.mentorId}</td><td>${obj.branch}</td><td>${obj.mentorPermision}</td><td>${obj.hodPermision}</td></tr>`;
     }else if(reportOf=='Faculty'){
-      report=`<h2>${reportOf} Leave Report</h2><br/><table><thead><th>Employ Id</th><th>Name</th><th>Email</th><th>Department</th><th>HOD Permision</th><th>Director Permision</th></thead><tbody>`;
+      report=`<h2>${reportOf} Leave Report</h2><br/><table><thead><th>Employ Id</th><th>Name</th><th>Department</th><th>Request D/T</th><th>From</th><th>To</th><th>HOD Permision</th><th>Director Permision</th></thead><tbody>`;
       for(obj of LeaveReport)
-      report+=`<tr><td>${obj.user}</td><td>${obj.name}</td><td>${obj.email}</td><td>${obj.department}</td><td>${obj.hodPermision}</td><td>${obj.directorPermision}</td></tr>`;
+      report+=`<tr><td>${obj.user}</td><td>${obj.name}</td><td>${obj.department}</td><td>${obj.dateTime}</td><td>${obj.from_date}</td><td>${obj.to_date}</td><td>${obj.permision1}</td><td>${obj.permision2}</td></tr>`;
     }else{
-      report=`<h2>${reportOf} Leave Report</h2><br/><table><thead><th>Employ Id</th><th>Name</th><th>Department</th><th>Email</th><th>Director Permision</th></thead><tbody>`;
+      report=`<h2>${reportOf} Leave Report</h2><br/><table><thead><th>Employ Id</th><th>Name</th><th>Department</th><th>Request D/T</th><th>From</th><th>To</th><th>Director Permision</th></thead><tbody>`;
       for(obj of LeaveReport)
-      report+=`<tr><td>${obj.user}</td><td>${obj.name}</td><td>${obj.email}</td><td>${obj.department}</td><td>${obj.directorPermision}</td></tr>`;
+      report+=`<tr><td>${obj.user}</td><td>${obj.name}</td><td>${obj.department}</td><td>${obj.dateTime}</td><td>${obj.from_date}</td><td>${obj.to_date}</td><td>${obj.permision1}</td></tr>`;
     }
     report+=`</tbody></table>`;
 
@@ -91,7 +100,11 @@ const sendLeaveReport=async function(reportOf,LeaveModel,toEmail){
         console.log(error);
       } else {
         console.log('Email sent: ' + info.response);
+        if(reportOf=='Student'){
           await LeaveModel.deleteMany({});
+        }else{
+          await LeaveModel.deleteMany({to_date:{ $lte: date.format(new Date(), 'YYYY-MM-DD')}})
+        }
           console.log(`Deletion of ${reportOf} Leave Sucessfull..`);
       }
     });
@@ -105,12 +118,8 @@ const sendLeaveReport=async function(reportOf,LeaveModel,toEmail){
 eventEmitor.on("sendLeaveReport",sendLeaveReport);
 
 setInterval(function () {
-  //console.log(date.format(new Date(), 'hh:mm:ss A'));
-   if( date.format(new Date(), 'hh:mm:ss A')=="05:25:00 PM"){ eventEmitor.emit("sendLeaveReport",'Student',require('./model/studentLeave'),'20r01a0541@cmritonline.ac.in');}
-   if( date.format(new Date(), 'hh:mm:ss A')=="05:30:00 PM"){ eventEmitor.emit("sendLeaveReport",'Faculty',require('./model/stafLeave'),'20r01a0541@cmritonline.ac.in');}
-   if( date.format(new Date(), 'hh:mm:ss A')=="06:00:00 PM"){ eventEmitor.emit("sendLeaveReport",'HOD',require('./model/hodLeave'),'20r01a0541@cmritonline.ac.in');}
-  }, 1000);
-
- 
-  
-  
+   console.log(date.format(new Date(), 'hh:mm:ss A'));
+   if( date.format(new Date(), 'hh:mm A')=="06:38 PM"){ eventEmitor.emit("sendLeaveReport",'Student',require('./model/studentLeave'),'20r01a0541@cmritonline.ac.in');}
+   if( date.format(new Date(), 'hh:mm A')=="06:39 PM"){ eventEmitor.emit("sendLeaveReport",'Faculty',require('./model/stafLeave'),'20r01a0541@cmritonline.ac.in');}
+   if( date.format(new Date(), 'hh:mm A')=="06:40 PM"){ eventEmitor.emit("sendLeaveReport",'HOD',require('./model/hodLeave'),'20r01a0541@cmritonline.ac.in');}
+  }, 60000);

@@ -21,8 +21,8 @@
 <div class="tab-content">
   <div class="tab-pane container active" id="home">
     <!--Student -->
-    <div id="Stdmsg" class="p-2 mx-auto text-center text-info  rounded"></div>
-    <form id="create" class="bg-light p-2 rounded">
+    <div id="Stdmsg" class="p-2 mx-auto text-center text-dark  rounded"></div>
+    <form id="create" class="p-2 rounded" style="background-color: #c7d6e7;">
       <div class="h5 ">Add new Student :</div>
   <div class="mx-auto row p-2">
     <div class="col-sm col-md p-2">
@@ -50,7 +50,7 @@
 </form>
 <hr/>
   <div class="h4">Search By:</div>
-  <form id="StdSearch" class="bg-light p-2 rounded">
+  <form id="StdSearch" class="bg-light p-2 rounded" >
     <div class="row mx-auto"><div class="col-sm col-md p-2"><select class="form-select" id="SType" name="searchBy" >
       <option value="user">user</option><option value="branch">branch</option><option value="mentorId">MentorId</option>
     </select> </div>
@@ -59,19 +59,20 @@
   </form>
   <hr/>
   <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm-3 h5">Name</div><div class="col-sm-3 h5">Email</div><div class="col-sm h5">MentorId</div><div class="col-sm h5">Update</div><div class="col-sm h5">Delete</div></div>
-  <div class="row bg-light rounded" id="stdResult"></div>
+  <div class="row  rounded" id="stdResult" style="background-color: #c4c9db;"></div>
     <!--Student -->
   </div>
   <div class="tab-pane container fade" id="menu1">
 
     <!--Faculty -->
-    <div id="fcltymsg" class="p-2 mx-auto text-center text-info  rounded"></div>
+    <div id="fcltymsg" class="p-2 mx-auto text-center text-dark  rounded"></div>
+    <div>
     <select name="TypeAdmin" class="form-select" id="AdminType">
       <option value="faculty">Faculty</option>
       <option value="hod">HOD</option>
       <option value="director">Director</option>
-    </select>
-    <form id="createF" class="bg-light p-2 rounded">
+    </select></div>
+    <form id="createF" class="p-2 rounded" style="background-color: #c7d6e7;">
       <div class="h5 ">Add new <span id="TypeName">FACULTY</span> :</div>
   <div class="mx-auto row p-2">
     <div class="col-sm col-md p-2">
@@ -105,20 +106,21 @@
   </form>
   <hr/>
   <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm-3 h5">Name</div><div class="col-sm-3 h5">Email</div><div class="col-sm h5">Department</div><div class="col-sm h5">Update</div><div class="col-sm h5">Delete</div></div>
-  <div class="row bg-light rounded" id="fcltyResult"></div>
+  <div class="row rounded" id="fcltyResult" style="background-color: #c4c9db;"></div>
     <!--Faculty -->
   </div>
   <div class="tab-pane container fade" id="menu2">
     <!--Leave-->
-    <div id="Leavemsg" class="p-2 mx-auto text-center text-info  rounded"></div>
+    <div id="Leavemsg" class="p-2 mx-auto text-center text-dark  rounded"></div>
+    <div>
     <select name="LeaveType" class="form-select my-2" id="LeaveType">
       <option value="student">Student</option>
       <option value="faculty">Faculty</option>
-      <option value="hod">HOD</option></select>
+      <option value="hod">HOD</option></select></div>
       <div class="h5 ">Leaves of <span id="LeaveName">STUDENT</span> :</div>
       <hr/>
       <div class="h4">Search By:</div>
-      <form id="LeaveSearch" class="bg-light p-2 rounded">
+      <form id="LeaveSearch" class="p-2 rounded" style="background-color: #c7d6e7;">
     <div class="row mx-auto"><div class="col-sm col-md p-2"><select class="form-select" id="LType" name="searchBy" >
       <option value="user">user</option><option value="all">ALL</option>
     </select> </div>
@@ -127,7 +129,7 @@
   </form>
   <hr/>
   <div class="row bg-secondary rounded p-2 mb-2"><div class="col-sm h5">User</div><div class="col-sm h5">Name</div><div class="col-sm h5">Delete</div></div>
-  <div class="row bg-light rounded" id="LeaveResult"></div>
+  <div class="row rounded" id="LeaveResult" style="background-color: #c4c9db;"></div>
       
     
 
@@ -155,7 +157,7 @@
           $.get(`/student/user?${$('#SType').val()}=${$('#Svalue').val()}`,function(data,sucess){
             var result='';
             for(obj of data){
-                 result+=`<form class="stdUpdate" action='/student/user/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="mentorId" value="${obj.mentorId}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
+                 result+=`<form class="stdUpdate" action='/student/user/${obj._id}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="mentorId" value="${obj.mentorId}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
             }
             $('#stdResult').html(result);
 
@@ -201,7 +203,7 @@
           $.get(`/${$('#AdminType').val()}/user?${$('#FType').val()}=${$('#Fvalue').val()}`,function(data,sucess){
             var result='';
             for(obj of data){
-                 result+=`<form class="fcltyUpdate" action='/${$('#AdminType').val()}/user/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="department" value="${obj.department}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
+                 result+=`<form class="fcltyUpdate" action='/${$('#AdminType').val()}/user/${obj._id}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="user" value="${obj.user}"></div><div class="col-sm-3 p-1"><input type="text" class='form-control' autocomplete="off" required name="name" value="${obj.name}"></div><div class="col-sm-3 p-1"><input type="email" autocomplete="off" name="email" class='form-control' required value="${obj.email}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" required name="department" value="${obj.department}"></div><div class="col-sm p-1"><button name="_method" class='btn btn-primary' value="PATCH">Update</button></div><div class="col-sm p-1"><button name="_method" class='btn btn-danger' value="DELETE">Delete</button></div></div></form>`;
             }
             $('#fcltyResult').html(result);
 
@@ -252,7 +254,7 @@
           $.get(`/${$('#LeaveType').val()}/leave`+reqData,function(data,sucess){
             var result='';
             for(obj of data){
-                 result+=`<form class="LeaveDelete" action='/${$('#LeaveType').val()}/leave/${obj.user}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="user" value="${obj.user}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="name" value="${obj.name}"></div><div class="col-sm p-1"><button class='btn btn-danger'>Delete</button></div></div></form>`;
+                 result+=`<form class="LeaveDelete" action='/${$('#LeaveType').val()}/leave/${obj._id}'><div class="row border-bottom p-2"><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="user" value="${obj.user}"></div><div class="col-sm p-1"><input type="text" class='form-control' autocomplete="off" readonly required name="name" value="${obj.name}"></div><div class="col-sm p-1"><button class='btn btn-danger'>Delete</button></div></div></form>`;
             }
             $('#LeaveResult').html(result);
 

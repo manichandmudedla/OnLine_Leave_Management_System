@@ -23,7 +23,7 @@
       <div class="h4">Faculty Leave status</div>
       <button hidden id="refresh-2" ></button>
       <div class="row h5 bg-secondary p-3 rounded">
-        <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">email</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
+         <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">Request D/T</div><div class="col-xs col-sm">From</div><div class="col-xs col-sm">To</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
       </div>
       <div class="row mt-2" id="stf">
       </div>
@@ -32,7 +32,7 @@
     <div class="h4">HOD Leave status</div>
     <button hidden id="refresh-3"></button>
       <div class="row h5 bg-secondary p-3 rounded">
-        <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">email</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
+        <div class="col-xs col-sm">User</div><div class="col-xs col-sm">Name</div><div class="col-xs col-sm">Department</div><div class="col-xs col-sm">Request D/T</div><div class="col-xs col-sm">From</div><div class="col-xs col-sm">To</div><div class="col-xs col-sm">Reason</div><div class="col-xs col-sm">Accept</div><div class="col-xs col-sm">Reject</div>
       </div>
       <div class="row mt-2" id="hod">
       </div>
@@ -45,19 +45,19 @@
 <script>
    $(document).ready(function(){
       $("#refresh-2").click(function(){
-        $.get("/hod/leave?directorPermision=Pending",function(data, statusTxt){
+        $.get("/hod/leave?permision1=Pending",function(data, statusTxt){
       if(statusTxt == "success"){
           alert("External content loaded successfully!");
         var reqst="";
         for(obj of data){
-          reqst+=(`<form class='f1' action='/hod/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.email}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
+          reqst+=(`<form class='f1' action='/hod/leave/${obj._id}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.dateTime}</div><div class="col-xs col-sm p-1">${obj.from_date}</div><div class="col-xs col-sm p-1">${obj.to_date}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
         }
         $("#hod").html(reqst);
          $('form.f1 button').on('click',function(e){
 
             e.preventDefault();
             const form=$(this.form);
-            $.post(form.attr('action'),form.serialize()+"&directorPermision="+$(this).attr('value'),function(data,status){
+            $.post(form.attr('action'),form.serialize()+"&permision1="+$(this).attr('value'),function(data,status){
               if(status==='success'){
               $("#refresh-2").click();
                 console.log(status);}
@@ -72,18 +72,18 @@
 
     //staff
     $("#refresh-3").click(function(){
-    $.get("/faculty/leave?hodPermision=Accepted&directorPermision=Pending", function(data, status){
+    $.get("/faculty/leave?permision1=Accepted&permision2=Pending", function(data, status){
       //alert("faculty data loaded...");
       var reqst1='';
       for(obj of data){
-          reqst1+=(`<form class='f2' action='/faculty/leave/${obj.user}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.email}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
+          reqst1+=(`<form class='f2' action='/faculty/leave/${obj._id}' method="POST"><input type="hidden" name="_method" value="PATCH"><div class='row p-2 border-bottom'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.department}</div><div class="col-xs col-sm p-1">${obj.dateTime}</div><div class="col-xs col-sm p-1">${obj.from_date}</div><div class="col-xs col-sm p-1">${obj.to_date}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="directorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="directorPermision" value="Rejected">Reject</button></div></div></form>`);
         }
         $("#stf").html(reqst1);
             $('form.f2 button').on('click',function(e){
 
             e.preventDefault();
             const form=$(this.form);
-            $.post(form.attr('action'),form.serialize()+"&directorPermision="+$(this).attr('value'),function(data,status){
+            $.post(form.attr('action'),form.serialize()+"&permision2="+$(this).attr('value'),function(data,status){
               if(status==='success'){
               $("#refresh-3").click();
                 console.log(status);}

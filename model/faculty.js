@@ -27,7 +27,8 @@ const faculty=new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    ftoken:String
 })
 
 

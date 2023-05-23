@@ -35,32 +35,11 @@
   <div class="tab-pane container fade" id="menu2">
       <button id="refresh" class="btn btn-primary">Refresh</button>
     <!--status  -->
-    <div class="col-xs col-sm-8 col-md-6  mt-2 mt-md-5 mb-5  mx-auto p-4 " style=" background-color: rgb(77, 69, 132); border-radius:20px; box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px; ">
-        <div class="row mb-3 h4  text-white overflow-hidden">
-        <img src="/static/img.webp" alt="CMRIT STD LOGIN" style="width:100vw" />
-        </div>
-        <div class="d-flex row">
-            <div class="col-xs col-sm-12 col-md-6 col-xl-6 text-center text-white overflow-hidden border-end">
-                <p >Online Leave</p>
-                <img class="mx-auto d-block mt-3 mb-3" src="/static/pofile.png" alt="This is profile" width="100vw">
-                <p >CMR Institute Of Technology</p>
-                <div>Name: <span>{{name}}</span></div>
-                <div>Department: <span>{{department}}</span></div>
-            </div>
-            <div class="col-xs col-sm-12 col-md-6 col-xl-6 overflow-hidden text-white">
-              <div>REQUEST TIME: <span id="time"></span></div>
-              <div class="input-group mb-3">
-                    <span class="input-group-text">user: </span><input type="text" class="form-control"  id="EmpNo"  readonly/>
-              </div>
-              <div class="input-group mb-3">
-                    <span class="input-group-text">HOD </span><input type="text" class="form-control"  id="hodPermision"  readonly/>
-              </div>
-              <div class="input-group mb-3">
-                    <span class="input-group-text">DIRECTOR </span><input type="text" class="form-control" id="directorPermision" readonly/>
-              </div>
-            </div>
-        </div>
+    <div class="h4 m-2">Leave History Status</div>
+    <div id="history" class="container-fluid p-2 rounded bg-light">
+      
     </div>
+
     <!--status  -->
 
   </div>
@@ -69,12 +48,13 @@
 
 <script>
    $(document).ready(function(){
+      var history;
       $('#refresh-2').click(function(){
         $.get("/student/leave?mentorPermision=Pending&mentorId="+$("#user").val(),function(data, statusTxt){
       if(statusTxt == "success"){
         var reqst='';
         for(obj of data){
-          reqst+=(`<form class='f1'  method="POST" action="/student/leave/${obj.user}" enctype="application/x-www-form-urlencoded"><input type="hidden" name="_method" value="PATCH"><div class='row border-bottom p-2'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="mentorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="mentorPermision" value="Rejected">Reject</button></div></div></form>`);
+          reqst+=(`<form class='f1'  method="POST" action="/student/leave/${obj._id}" enctype="application/x-www-form-urlencoded"><input type="hidden" name="_method" value="PATCH"><div class='row border-bottom p-2'><div class="col-xs col-sm p-1">${obj.user}</div><div class="col-xs col-sm p-1">${obj.name}</div><div class="col-xs col-sm p-1">${obj.reason}</div><div class="col-xs col-sm p-1"><button  class="btn btn-primary" name="mentorPermision" value="Accepted">Accept</button></div><div class="col-xs col-sm p-1"><button class="btn btn-warning" name="mentorPermision" value="Rejected">Reject</button></div></div></form>`);
         }
         $("#per").html(reqst);
          $('form.f1 button').on('click',function(e){
@@ -94,50 +74,88 @@
        
     });
     });
+    function getColor(status){
+      if(status=='Pending')return "yellow";
+      if(status=='Accepted')return "green";
+      if(status=='Rejected')return "red";
+    }
 
  
     $("#refresh").click(function(){
     $.get("/faculty/leave?user="+$("#user").val(), function(data, status){
+      history=data;
       alert( "Status updated"+ "\nStatus: " + status);
-      if(data.length===0){
-          $("#hodPermision,#directorPermision,#EmpNo").val("").css("background-color",'white');
-          $("#time").html("");
-      }else{
-      data=data[0];
-      $('#EmpNo').val(data.user);
-      $("#time").html(data.date);
-      $("#hodPermision").val(data.hodPermision).css("background-color","yellow");
-      if(data.hodPermision=='Accepted')$("#hodPermision").css("background-color", "green");
-      else if(data.hodPermision=='Rejected') $("#hodPermision").css("background-color", "red");
-
-      $("#directorPermision").val(data.directorPermision).css("background-color","yellow");
-      if(data.directorPermision=='Accepted')$("#directorPermision").css("background-color", "green");
-      else if(data.directorPermision=='Rejected') $("#directorPermision").css("background-color", "red");
+      let ele='';
+      for(obj of data){
+        
+      ele+=`<div class="flip mx-auto mt-2 row p-2 w-75 bg-dark text-white rounded " >
+        <div class="col-sm">User :${obj.user}</div><div class="col-sm">From :${obj.from_date}</div><div class="col-sm">To :${obj.to_date}</div>
+      </div>
+      <div style='display:none;' class="panel row mx-auto rounded bg-info w-75 p-2" >
+        <div class=" row input-group mb-3">
+            <span class="input-group-text col-xs col-sm">HOD Permision:</span><input name="name" type="text" class="form-control col-xs col-sm"  value="${obj.permision1}" style='background-color:${getColor(obj.permision1)}' readonly />
+        </div>
+        <div class="row input-group mb-3">
+            <span class="input-group-text col-xs col-sm">Director Permision:</span><input name="name" type="text" class="form-control col-xs col-sm" value="${obj.permision2}" style='background-color:${getColor(obj.permision2)}' readonly />
+        </div>
+      </div>`;
       }
+    $("#history").html(ele);
+    
+
+
+      $(".flip").click(function(){
+      $(this).next().slideToggle("slow");
+      });
+
     });
   });
-
-   $("#formId").submit(function(e){
-    e.preventDefault();
-    $.post($(this).attr('action'),$(this).serialize(),function(data,status){
-         $('#resMsg').html(data).css('background-color','#42e6f5');
+  function msg(data){
+    $('#resMsg').html(data).css('background-color','#42e6f5');
         setTimeout(()=>{$('#resMsg').html("").css('background-color','');},5000);
+  }
+   $("#formId").submit(function(e){
+    
+    e.preventDefault();
+    var fromDate=new Date($('#from').val());
+    var toDate=new Date($('#to').val());
+    var isIntersect=false;
+    for(obj of history){
+      console.log(obj);
+      if(new Date(obj.from_date)<= toDate && new Date(obj.to_date) >= fromDate){
+        isIntersect=true; break;
+      }
+    }
+    console.log(fromDate>toDate);
+    if(fromDate>toDate || isIntersect){
+      msg("Invalid Leave Date");
+    }else{
+    $.post($(this).attr('action'),$(this).serialize(),function(data,status){
+        msg(data);
         $("#refresh").click();
     });
+    }
   });
 
   
 
     $("#refresh").click();
     $("#refresh-2").click();
-    
 
     
   });
-   window.history.forward();
+  function preventBack() {
+            window.history.forward(); 
+        }
+          
+        setTimeout("preventBack()", 0);
+          
+        window.onunload = function () { null };
+  /* window.history.forward();
         function noBack() {
             window.history.forward();
-        }
+        }*/
+    
 </script>
 
 </body>
